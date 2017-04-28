@@ -105,11 +105,10 @@ if __name__ == "__main__":
     ys = tf.placeholder(tf.float32,[None,1])
 
     l1 = addLayer(xs,12,24,activity_function=tf.nn.relu)
-    l2 = addLayer(l1,24,24, activity_function=tf.nn.relu)
-    l3 = addLayer(l2,24,12, activity_function=tf.nn.relu)
-    l4 = addLayer(l3,12,1,activity_function=None)
-    loss = tf.reduce_mean(tf.reduce_sum(tf.square((ys-l4)),reduction_indices = [1]))
-    predict = l4 * scalery.scale_ + scalery.mean_
+    l2 = addLayer(l1,24,12, activity_function=tf.nn.relu)
+    l3 = addLayer(l2,12,1,activity_function=None)
+    loss = tf.reduce_mean(tf.reduce_sum(tf.square((ys-l3)),reduction_indices = [1]))
+    predict = l3 * scalery.scale_ + scalery.mean_
 
     saver = tf.train.Saver()
     if not os.path.exists('tmp/'):
@@ -128,11 +127,12 @@ if __name__ == "__main__":
     sess.run(init)
 
     for i in range(50000):
+        #train = tf.train.GradientDescentOptimizer(1.0 / (1.0 * (i + 10))).minimize(loss)
         sess.run(train,feed_dict={xs:x_data,ys:y_data})
         #print sess.run(l2, feed_dict={xs: x_data, ys: y_data})
         if i%50 == 0:
             print sess.run(loss,feed_dict={xs:x_data,ys:y_data})
-            save_path = saver.save(sess, 'tmp/model.ckpt')
+            save_path = saver.save(sess, 'tmp/model1.ckpt')
 
     #print sess.run(predict, feed_dict={xs:np.array(test_x[0])})
     lable_y =  sess.run(predict, feed_dict={xs: x_data, ys: y_data})
