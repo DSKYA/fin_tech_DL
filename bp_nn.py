@@ -73,6 +73,8 @@ def addLayer(inputData,inSize,outSize,activity_function = None):
 	return ans
 
 
+
+
 if __name__ == "__main__":
     print ('This is main of module "hello.py"')
     x_raw = inputx('2.csv')
@@ -115,6 +117,7 @@ if __name__ == "__main__":
             print sess.run(loss,feed_dict={xs:x_data,ys:y_data})
             save_path = saver.save(sess, 'tmp/model.ckpt')
 
+    #self.session.run(self.output_layer, feed_dict={self.input_layer: case})
     print("path: %s"%(save_path))
     sess.run()
 
