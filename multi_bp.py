@@ -81,6 +81,7 @@ def testanalysis(y_data,test_y,theta):
             account += 1
         num += 1
     print "ac ratio is : %s" % (account * 1.0 / num)
+    return account * 1.0 / num
 
 
 

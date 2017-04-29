@@ -1,8 +1,10 @@
+import matplotlib
 import numpy as np
 import tensorflow as tf
 import os
 import csv
 from multi_bp import *
+import matplotlib.pyplot as plt
 
 
 x_raw = inputx('2.csv')
@@ -29,5 +31,12 @@ with tf.Session() as sess:
     # Restore variables from disk.
     saver.restore(sess, "tmp/model1.ckpt")
     print "Model restored."
+    x = np.linspace(0,0.1,100)
+    plt.figure(figsize=(10, 5))
     lable_y =  sess.run(predict, feed_dict={xs: x_data, ys: y_data})
-testanalysis(np.array(y_raw).astype(np.float32), lable_y, 0.05)
+    y = []
+    for i in range(len(x)):
+        y.append(testanalysis(np.array(y_raw).astype(np.float32), lable_y, x[i]))
+    plt.plot(x, y)
+    plt.show()
+    print y
