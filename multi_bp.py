@@ -80,34 +80,29 @@ def testanalysis(y_data,test_y,theta):
         if (abs(test_y[i, 0] - y_data[i,0]) / y_data[i,0] <= theta):
             account += 1
         num += 1
-    print "ac ratio is : %s" % (account * 1.0 / num)
+    #print "ac ratio is : %s" % (account * 1.0 / num)
     return account * 1.0 / num
 
 
 
 if __name__ == "__main__":
-    print ('This is main of module "hello.py"')
     x_raw = inputx('2.csv')
     y_raw = inputy('1.csv')
     x_data = np.array(x_raw).astype(np.float32)
-    #x_data = np.array(prepare(x_raw)).astype(np.float32)
     y_data = np.array(y_raw).astype(np.float32)
     scaler = preprocessing.StandardScaler().fit(x_data)
     print scaler.mean_, scaler.scale_
-    #x_data_standard = scaler.transform(x_data)
     x_data = scaler.transform(x_data)
     scalery = preprocessing.StandardScaler().fit(y_data)
     print scalery.mean_, scalery.scale_
-    # x_data_standard = scaler.transform(x_data)
     y_data = scalery.transform(y_data)
 
-    batch_size = 1
     xs = tf.placeholder(tf.float32,[None,12])
     ys = tf.placeholder(tf.float32,[None,1])
 
-    l1 = addLayer(xs,12,24,activity_function=tf.nn.relu)
-    l2 = addLayer(l1,24,12, activity_function=tf.nn.relu)
-    l3 = addLayer(l2,12,1,activity_function=None)
+    l1 = addLayer(xs,12,20,activity_function=tf.nn.relu)
+    l2 = addLayer(l1,20,20, activity_function=tf.nn.relu)
+    l3 = addLayer(l2, 20, 1, activity_function=None)
     loss = tf.reduce_mean(tf.reduce_sum(tf.square((ys-l3)),reduction_indices = [1]))
     predict = l3 * scalery.scale_ + scalery.mean_
 
@@ -122,7 +117,7 @@ if __name__ == "__main__":
             print "Model restored."
     '''
     #train =  tf.train.GradientDescentOptimizer(0.002).minimize(loss)
-    train = tf.train.AdamOptimizer(0.002).minimize(loss)
+    train = tf.train.AdamOptimizer(0.001).minimize(loss)
     init = tf.initialize_all_variables()
     sess = tf.Session()
     sess.run(init)

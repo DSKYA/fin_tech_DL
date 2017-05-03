@@ -13,8 +13,8 @@ def inputx(s):
         reader = csv.reader(f)
         for row in reader:
             if n_row != 0:
-                #x_data.append(row[1:len(row) - 1])
-                x_data.append(row[1:3] + row[4:5] + row[6:len(row) - 1])
+                x_data.append(row[1:len(row) - 1])
+                #x_data.append(row[1:3] + row[4:5] + row[6:len(row) - 1])
                 #print x_data
             #print row
             n_row += 1
@@ -47,6 +47,7 @@ def prepare(x):
     for i in range(len(count)):
         count[i] = len(y[i]) - y[i].count(0)
         tsum[i] = sum(y[i]) / count[i]
+        print ("%s = %s" %(i,1.0 * y[i].count(0) / 4729))
     for i in range(len(x)):
         for j in range(len(x[0])):
             if(float(x[i][j]) == 0):
@@ -70,15 +71,15 @@ if __name__ == "__main__":
     print ('This is main of module "hello.py"')
     x_raw = inputx('2.csv')
     y_raw = inputy('1.csv')
-    x_data = np.array(x_raw).astype(np.float32)
-    #x_data = np.array(prepare(x_raw)).astype(np.float32)
+    #x_data = np.array(x_raw).astype(np.float32)
+    x_data = np.array(prepare(x_raw)).astype(np.float32)
     y_data = np.array(y_raw).astype(np.float32)
     scaler = preprocessing.StandardScaler().fit(x_data)
     print scaler.mean_, scaler.scale_
     x_data_standard = scaler.transform(x_data)
 
-    W = tf.Variable(tf.zeros([12, 1]))
-    #W = tf.Variable(tf.zeros([14, 1]))
+    #W = tf.Variable(tf.zeros([12, 1]))
+    W = tf.Variable(tf.zeros([14, 1]))
     b = tf.Variable(tf.zeros([1, 1]))
     y = tf.matmul(x_data_standard, W) + b
 
